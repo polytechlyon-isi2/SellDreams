@@ -1,33 +1,35 @@
-drop table if exists t_reve;
-create table t_reve (
-reve_id integer not null primary key auto_increment,
-reve_title varchar(100) not null,
-reve_content varchar(2000) not null,
-reve_categorie varchar(100) not null,
-reve_img varchar(100) not null
-) engine=innodb character set utf8 collate utf8_unicode_ci;
-
-drop table if exists t_categorie;
-create table t_categorie (
-cat_id integer not null primary key auto_increment,
-cat_title varchar(100) not null
-) engine=innodb character set utf8 collate utf8_unicode_ci;
-
 drop table if exists t_comment;
-create table t_comment (
-com_id integer not null primary key auto_increment,
-com_content varchar(20000) not null,
-com_reve_id integer,
-com_user_id integer
+drop table if exists t_user;
+drop table if exists t_article;
+
+create table t_categorie (
+    cat_id integer not null primary key auto_increment,
+    cat_title varchar(200) not null
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
-/*
-drop table if exists t_utilisateur;
-create table t_utilisateur (
-user_id integer not null primary key auto_increment,
-user_name varchar(100) not null,
-user_pwd varchar(100) not null,
-user_salt varchar(100) not null,
-user_role varchar(100) not null,
+create table t_article (
+    art_id integer not null primary key auto_increment,
+    art_title varchar(100) not null,
+    art_content varchar(2000) not null,
+	art_categorie varchar(200) not null,
+	art_img varchar(200) not null
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
-*/
+
+create table t_user (
+    usr_id integer not null primary key auto_increment,
+    usr_name varchar(50) not null,
+    usr_password varchar(88) not null,
+    usr_salt varchar(23) not null,
+    usr_role varchar(50) not null 
+) engine=innodb character set utf8 collate utf8_unicode_ci;
+
+create table t_comment (
+    com_id integer not null primary key auto_increment,
+    com_content varchar(500) not null,
+    art_id integer not null,
+    usr_id integer not null,
+    constraint fk_com_art foreign key(art_id) references t_article(art_id),
+    constraint fk_com_usr foreign key(usr_id) references t_user(usr_id)
+) engine=innodb character set utf8 collate utf8_unicode_ci;
+
+

@@ -8,9 +8,7 @@ body {
     text-align: center;
 }
 .articleTitle:hover, .articleTitle:focus {
-
     text-decoration: none;
-
 }
 .adminTable {
 

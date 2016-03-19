@@ -1,0 +1,10 @@
+{% extends "layout.html.twig" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+	{% for categorie in categories %}
+		<article>
+			<h2>{{ categorie.title }}</a></h2>
+		</article>
+	{% endfor %}
+{% endblock %}
