@@ -2,6 +2,7 @@
 namespace SellDreams\DAO;
 
 use SellDreams\Domain\Categorie;
+
 class CategorieDAO extends DAO
 {
     /**

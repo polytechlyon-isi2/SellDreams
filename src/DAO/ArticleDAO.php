@@ -4,15 +4,23 @@ namespace SellDreams\DAO;
 use SellDreams\Domain\Article;
 class ArticleDAO extends DAO
 {
+	/**
+     * @var \MicroCMS\DAO\ArticleDAO
+     */
+    private $categorieDAO;
+    public function setCategorieDAO(CategorieDAO $categorieDAO) {
+        $this->categorieDAO = $categorieDAO;
+    }
+
     /**
      * Return a list of all articles, sorted by date (most recent first).
      *
      * @return array A list of all articles.
      */
-    public function findAll() {
-        $sql = "select * from t_article order by art_id desc";
-        $result = $this->getDb()->fetchAll($sql);
-
+    public function findAllByCategorie($categorieID) {
+		//$categorie = $this->categorieDAO->find($categorieId);
+        $sql = "select * from t_article where art_categorie=? order by art_id desc";
+        $result = $this->getDb()->fetchAll($sql, array($categorieID));
         // Convert query result to an array of domain objects
         $articles = array();
         foreach ($result as $row) {

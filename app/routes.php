@@ -1,10 +1,11 @@
 <?php
 
 // Home page
-$app->get('/', function () use ($app) {
-    $articles = $app['dao.article']->findAll();
-    return $app['twig']->render('index.html.twig', array('articles' => $articles));
-})->bind('home');
+$app->get('/categorie/{id}', function ($id) use ($app) {
+    $articles = $app['dao.article']->findAllByCategorie($id);
+    return $app['twig']->render('categorie.html.twig', array('articles' => $articles));
+})->bind('categorie');
+
 $app->get('/', function () use ($app) {
     $categories = $app['dao.categorie']->findAll();
     return $app['twig']->render('index.html.twig', array('categories' => $categories));
@@ -12,11 +13,10 @@ $app->get('/', function () use ($app) {
 
 // Article details with comments
 $app->get('/article/{id}', function ($id) use ($app) {
-    $article = $app['dao.article']->find($id);
+    $article = $app['dao.article']->findAllByCategorie($id);
     $comments = $app['dao.comment']->findAllByArticle($id);
     return $app['twig']->render('article.html.twig', array('article' => $article, 'comments' => $comments));
 })->bind('article');
-
 
 // Login form
 $app->get('/login', function(Request $request) use ($app) {
