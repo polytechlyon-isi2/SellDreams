@@ -42,7 +42,7 @@ class CategorieDAO extends DAO
      * @return \MicroCMS\Domain\Article|throws an exception if no matching article is found
      */
     public function find($id) {
-        $sql = "select * from t_categorie where art_id=?";
+        $sql = "select * from t_categorie where cat_id=?";
         $row = $this->getDb()->fetchAssoc($sql, array($id));
 
         if ($row)

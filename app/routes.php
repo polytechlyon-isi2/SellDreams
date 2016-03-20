@@ -2,8 +2,9 @@
 
 // Home page
 $app->get('/categorie/{id}', function ($id) use ($app) {
+	$categorie = $app['dao.categorie']->find($id);
     $articles = $app['dao.article']->findAllByCategorie($id);
-    return $app['twig']->render('categorie.html.twig', array('articles' => $articles));
+    return $app['twig']->render('categorie.html.twig', array('articles' => $articles, 'categorie' => $categorie));
 })->bind('categorie');
 
 $app->get('/', function () use ($app) {
@@ -13,7 +14,7 @@ $app->get('/', function () use ($app) {
 
 // Article details with comments
 $app->get('/article/{id}', function ($id) use ($app) {
-    $article = $app['dao.article']->findAllByCategorie($id);
+    $article = $app['dao.article']->find($id);
     $comments = $app['dao.comment']->findAllByArticle($id);
     return $app['twig']->render('article.html.twig', array('article' => $article, 'comments' => $comments));
 })->bind('article');
