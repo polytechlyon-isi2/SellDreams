@@ -4,7 +4,9 @@ drop table if exists t_article;
 
 create table t_categorie (
     cat_id integer not null primary key auto_increment,
-    cat_title varchar(200) not null
+    cat_title varchar(200) not null,
+	cat_content varchar(2000) not null,
+	cat_img varchar(200) not null
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table t_article (
