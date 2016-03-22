@@ -7,6 +7,11 @@ body {
     padding-top: 10px;
     text-align: center;
 }
+
+.thumbnail {
+    text-align: center;
+}
+	
 .articleTitle:hover, .articleTitle:focus {
     text-decoration: none;
 }

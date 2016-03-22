@@ -2,9 +2,13 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-	{% for categorie in categories %}
-		<article>
-		<h2><a class="categorieTitle" href="{{ path('categorie', { 'id': categorie.id }) }}">{{ categorie.title }}</a></h2>
-		</article>
-	{% endfor %}
+        <div class="container">
+            <div class="row">
+                {% for categorie in categories %}
+                <div class="col-md-4">
+	               <h2><a class="thumbnail" href="{{ path('categorie', { 'id': categorie.id }) }}">{{ categorie.title }}</a></h2>
+                </div>
+                {% endfor %}
+            </div>
+        </div> 
 {% endblock %}
