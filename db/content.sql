@@ -2,6 +2,10 @@ insert into t_categorie values
 (1, 'Reve', 'Venait voyager dans nos pays merveilleux', '/imge/existe/pas');
 insert into t_categorie values
 (2, 'Cauchemard', 'Mouahahaha vous etes modie', '/imge/existe/pas');
+insert into t_categorie values
+(3, 'Maison', 'Une grande maison', '/imge/existe/pas');
+insert into t_categorie values
+(4, 'Travail', 'Bcp de travail', '/imge/existe/pas');
 
 insert into t_article values
 (1, 'Alice au pays des merveille', 'Très beau voyage dans un compte de fée',1,'/adresse/bidon/');

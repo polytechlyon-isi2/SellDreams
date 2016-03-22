@@ -10,23 +10,24 @@ body {
 
 .thumbnail {
     text-align: center;
+    min-height: 300px;
+}
+
+.thumbnail img {
+    /*width: 250px;
+    height: 250px;*/
+    front-size: 100%;
 }
 	
 .articleTitle:hover, .articleTitle:focus {
     text-decoration: none;
 }
 .adminTable {
-
     margin-top: 20px;
-
     margin-bottom: 20px;
-
 }
 
 #errorPanel {
-
     padding-top: 30px;
-
     padding-bottom: 10px;
-
 }
