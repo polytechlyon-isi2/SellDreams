@@ -24,6 +24,27 @@ class Article
      * @var string
      */
     private $content;
+    
+    /**
+     * Categorie content
+     *
+     * @var string
+     */
+    private $img;
+    
+    /**
+     * Categorie content
+     *
+     * @var string
+     */
+    private $value;
+    
+    /**
+     * Categorie content
+     *
+     * @var string
+     */
+    private $categorie;
 
     public function getId() {
         return $this->id;
@@ -47,5 +68,29 @@ class Article
 
     public function setContent($content) {
         $this->content = $content;
+    }
+    
+    public function getImg() {
+        return $this->img;
+    }
+
+    public function setImg($img) {
+        $this->img = $img;
+    }
+    
+    public function getValue() {
+        return $this->value;
+    }
+
+    public function setValue($value) {
+        $this->value = $value;
+    }
+    
+    public function getCategorie() {
+        return $this->categorie;
+    }
+
+    public function setCategorie($categorie) {
+        $this->categorie = $categorie;
     }
 }

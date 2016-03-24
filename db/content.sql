@@ -1,20 +1,20 @@
 insert into t_categorie values
-(1, 'Reve', 'Venait voyager dans nos pays merveilleux', '/imge/existe/pas');
+(1, 'Reve', 'Venait voyager dans nos pays merveilleux', '/images/hiver.jpg');
 insert into t_categorie values
-(2, 'Cauchemard', 'Mouahahaha vous etes modie', '/imge/existe/pas');
+(2, 'Cauchemard', 'Mouahahaha vous etes modie', '/images/premiere.jpg');
 insert into t_categorie values
-(3, 'Maison', 'Une grande maison', '/imge/existe/pas');
+(3, 'Maison', 'Une grande maison', '/images/deuxieme.jpg');
 insert into t_categorie values
-(4, 'Travail', 'Bcp de travail', '/imge/existe/pas');
+(4, 'Travail', 'Bcp de travail', '/images/troisieme.jpg');
 
 insert into t_article values
-(1, 'Alice au pays des merveille', 'Très beau voyage dans un compte de fée',1,'/adresse/bidon/');
+(1, 'Alice au pays des merveille', 'Très beau voyage dans un compte de fée',1,'/images/quatrieme.jpg',19);
 insert into t_article values
-(2, 'Les sept nains', 'Venez voyager au milieu de nos 7 nains tous plus gentil les un que les autres',1,'/adresse/bidon/');
+(2, 'Les sept nains', 'Venez voyager au milieu de nos 7 nains tous plus gentil les un que les autres',1,'/images/cinquieme.jpg',19);
 insert into t_article values
-(3, 'Cendrillon', "Venez voyager au pays de cendrillon",1,'/adresse/bidon/');
+(3, 'Cendrillon', "Venez voyager au pays de cendrillon",1,'/images/sixieme.jpg',19);
 insert into t_article values
-(4, 'Enfer', "Venez d'écrouvrir votre futur résidence au plus vite nous somme tou impatient de vous retrouver 7 pied sous terre",2,'/adresse/bidon/');
+(4, 'Enfer', "Venez d'écrouvrir votre futur résidence au plus vite nous somme tou impatient de vous retrouver 7 pied sous terre",2,'/images/septieme.jpg',19);
 
 /* raw password is 'john' */
 insert into t_user values

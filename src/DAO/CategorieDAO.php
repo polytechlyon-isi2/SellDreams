@@ -32,6 +32,8 @@ class CategorieDAO extends DAO
         $categorie = new Categorie();
         $categorie->setId($row['cat_id']);
         $categorie->setTitle($row['cat_title']);
+        $categorie->setContent($row['cat_content']);
+        $categorie->setImg($row['cat_img']);
         return $categorie;
     }
 	/**

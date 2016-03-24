@@ -2,14 +2,16 @@
 {% block title %}{{ categorie.title }}{% endblock %}
 
 {% block content %}
-<p>
-	<h1>{{ categorie.title }} :</h1>
-	{% for article in articles %}
-		<article>
-			<h2><a class="articleTitle" href="{{ path('article', { 'id': article.id }) }}">{{ article.title }}</a></h2>
-			
-		</article>
-	{% endfor %}
-	
-</p>
+    <div class="container">
+        <br>
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-4">
+                    <a class="thumbnail" href="{{ path('article', { 'id': article.id }) }}">
+                        <img src="{{ app.request.basepath }}{{ article.img }}" alt=""><h2>{{ article.title }}</h2>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div> 
 {% endblock %}
