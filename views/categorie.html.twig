@@ -2,6 +2,8 @@
 {% block title %}{{ categorie.title }}{% endblock %}
 
 {% block content %}
+    //Si on est dans les cauchemard il faudrai mettre le fond en noir si c'est possible.. Laissé en blanc si c'est les reve
+    Il faut ajouter le prix
     <div class="container">
         <br>
         <div class="row">
@@ -9,7 +11,9 @@
                 <div class="col-md-4">
                     <a class="thumbnail" href="{{ path('article', { 'id': article.id }) }}">
                         <img src="{{ app.request.basepath }}{{ article.img }}" alt=""><h2>{{ article.title }}</h2>
+                        <p>{{ article.value }}$</p>
                     </a>
+                     
                 </div>
                 {% endfor %}
             </div>
