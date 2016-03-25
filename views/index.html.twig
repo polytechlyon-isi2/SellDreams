@@ -5,7 +5,6 @@
 
 {% block content %}
     {% for categorie in categories %}
-    <div class="container">
         <div class="row">
             <div class="col-md-6">
                 <a class="thumbnail_font" href="{{ path('categorie', { 'id': categorie.id }) }}">
@@ -14,6 +13,5 @@
                 </a>
             </div>
         {% endfor %}
-        </div>
-    </div>     
+        </div> 
 {% endblock %}
