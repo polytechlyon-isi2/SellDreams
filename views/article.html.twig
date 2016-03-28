@@ -2,9 +2,7 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
-<p>Il faut revoir toute la presentation de cette page.
-    De même que pour l'autre mettre en noir si c'est un cauchemard ou en blanc si c'est un reve (le fond)
-    reflechir a comment afficher cette page
+
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-6">
@@ -45,5 +43,4 @@
     {% else %}
         <a href="{{ path('login') }} ">Log in</a> to add comments.
     {% endif %}
-</p>
 {% endblock %}
