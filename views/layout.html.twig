@@ -8,7 +8,7 @@
     <link href="{{ app.request.basepath }}/css/selldreams.css" rel="stylesheet">
     <title>SellDreams - {% block title %}{% endblock %}</title>
 </head>
-{% if categorie is defined and categorie.title=="Reve"%}
+{% if (categorie is defined and categorie.title=="Reve") or article is defined %}
 <body class="whiteBackGround">
 {% else %}
 <body class="darkBackGround">    
