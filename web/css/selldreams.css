@@ -9,6 +9,15 @@
     color: white;
 }
 
+.jumbotron { 
+    background-color: black;
+    color: white;
+}
+
+.jumbotron img {
+    width: 350px;  
+}
+
 .footer {
     border-top: 1px solid #ccc;
     padding-top: 10px;
