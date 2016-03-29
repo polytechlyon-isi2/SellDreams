@@ -48,11 +48,6 @@
 
 
 /*Pour l'affichage dans article.html*/
-.jumbotron { 
-    background-color: black;
-    color: white;
-}
-
 .jumbotron img {
     width: 350px;  
 }

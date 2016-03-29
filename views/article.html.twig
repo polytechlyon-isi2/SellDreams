@@ -2,8 +2,11 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
-
-    <div class="jumbotron">
+{% if article.categorie==1 %}
+    <div class="jumbotron" style="background-color: white;color: black;">
+{% else %}
+    <div class="jumbotron" style="background-color: black;color: white;">
+{% endif %}
         <div class="row">
             <div class="col-md-6">
                 <h2>{{ article.title }}</h2>

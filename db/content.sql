@@ -1,7 +1,7 @@
 insert into t_categorie values
 (1, 'Reve', 'Venait voyager dans nos pays merveilleux', '/images/Ange.jpg');
 insert into t_categorie values
-(2, 'Cauchemard', 'Mouahahaha vous etes modie', '/images/Demond.jpg');
+(2, 'Cauchemar', 'Mouahahaha vous etes modie', '/images/Demond.jpg');
 
 insert into t_article values
 (1, 'Alice au pays des merveille', 'Très beau voyage dans un compte de fée',1,'/images/quatrieme.jpg',19);

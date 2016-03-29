@@ -4,6 +4,7 @@ namespace SellDreams\Domain;
 
 class Article 
 {
+    
     /**
      * Article id.
      *
@@ -93,4 +94,6 @@ class Article
     public function setCategorie($categorie) {
         $this->categorie = $categorie;
     }
+
+
 }
