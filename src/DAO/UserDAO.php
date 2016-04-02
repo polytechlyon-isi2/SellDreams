@@ -37,6 +37,19 @@ class UserDAO extends DAO implements UserProviderInterface
         else
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function loadUserByEmail($email)
+    {
+        $sql = "select * from t_user where usr_email=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($email));
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
+    }
 
     /**
      * {@inheritDoc}
@@ -67,6 +80,13 @@ class UserDAO extends DAO implements UserProviderInterface
         $user = new User();
         $user->setId($row['usr_id']);
         $user->setUsername($row['usr_name']);
+        
+        $user->setUserlastname($row['usr_last_name']);
+        $user->setAdress($row['usr_adress']);
+        $user->setPostalcode($row['usr_postal_code']);
+        $user->setCity($row['usr_city']);
+        $user->setEmail($row['usr_email']);
+        
         $user->setPassword($row['usr_password']);
         $user->setSalt($row['usr_salt']);
         $user->setRole($row['usr_role']);
@@ -97,8 +117,15 @@ class UserDAO extends DAO implements UserProviderInterface
      * @param \MicroCMS\Domain\User $user The user to save
      */
     public function save(User $user) {
-        $userData = array(
+        $userData = array(        
             'usr_name' => $user->getUsername(),
+                    
+            'usr_last_name' => $user->getUserlastname(),
+            'usr_adress' => $user->getAdress(),
+            'usr_postal_code' => $user->getPostalcode(),
+            'usr_city' => $user->getCity(),
+            'usr_email' => $user->getEmail(),
+                    
             'usr_salt' => $user->getSalt(),
             'usr_password' => $user->getPassword(),
             'usr_role' => $user->getRole()

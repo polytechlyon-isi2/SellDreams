@@ -12,17 +12,15 @@ insert into t_article values
 insert into t_article values
 (4, 'Enfer', 'Venez d''écrouvrir votre futur résidence au plus vite nous somme tou impatient de vous retrouver 7 pied sous terre',2,'/images/septieme.jpg',19);
 
-/* raw password is 'john' */
+/*
 insert into t_user values
-(1, 'JohnDoe', 'L2nNR5hIcinaJkKR+j4baYaZjcHS0c3WX2gjYF6Tmgl1Bs+C9Qbr+69X8eQwXDvw0vp73PrcSeT0bGEW5+T2hA==', 'YcM=A$nsYzkyeDVjEUa7W9K', 'ROLE_USER');
-/* raw password is 'jane' */
-insert into t_user values
-(2, 'JaneDoe', 'EfakNLxyhHy2hVJlxDmVNl1pmgjUZl99gtQ+V3mxSeD8IjeZJ8abnFIpw9QNahwAlEaXBiQUBLXKWRzOmSr8HQ==', 'dhMTBkzwDKxnD;4KNs,4ENy', 'ROLE_USER');
-/* raw password is '@dm1n' */
-insert into t_user values
-(3, 'admin', 'gqeuP4YJ8hU3ZqGwGikB6+rcZBqefVy+7hTLQkOD+jwVkp4fkS7/gr1rAQfn9VUKWc7bvOD7OsXrQQN5KGHbfg==', 'EDDsl&fBCJB|a5XUtAlnQN8', 'ROLE_ADMIN');
+(1, 'admin', 'nom de famille','adresse','38530','Pontcharra','matthieu@gmail.com', 'gqeuP4YJ8hU3ZqGwGikB6+rcZBqefVy+7hTLQkOD+jwVkp4fkS7/gr1rAQfn9VUKWc7bvOD7OsXrQQN5KGHbfg==', 'EDDsl&fBCJB|a5XUtAlnQN8', 'ROLE_ADMIN');
 
 insert into t_comment values
 (1, 'Great! Keep up the good work.', 1, 1);
 insert into t_comment values
-(2, "Thank you, I'll try my best.", 1, 2);
+(2, "Thank you, I'll try my best.", 1, 1);
+
+insert into t_basket values
+(1,1,1,18);
+*/

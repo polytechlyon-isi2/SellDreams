@@ -21,6 +21,11 @@ create table t_article (
 create table t_user (
     usr_id integer not null primary key auto_increment,
     usr_name varchar(50) not null,
+    usr_last_name varchar(50) not null,
+    usr_adress varchar(50) not null,
+    usr_postal_code varchar(5),
+    usr_city varchar(50) not null,
+    usr_email varchar(50) not null,
     usr_password varchar(88) not null,
     usr_salt varchar(23) not null,
     usr_role varchar(50) not null 
@@ -36,3 +41,9 @@ create table t_comment (
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 
+create table t_basket (
+    bas_id integer not null primary key auto_increment,
+    usr_id integer not null,
+    art_id integer not null,
+    bas_quantity integer not null
+) engine=innodb character set utf8 collate utf8_unicode_ci;
