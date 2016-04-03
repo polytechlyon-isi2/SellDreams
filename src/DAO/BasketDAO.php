@@ -62,16 +62,16 @@ class BasketDAO extends DAO
     }
     
     
-    public function save(Article $basket) {
+    public function save(Basket $basket) {
         $basket->setQuantity($basket->getQuantity()+1);
         $basketData = array(
             'usr_id' => $basket->getUsrid(),
-            'art_id' => $basket->getArtid(),
+            'art_id' => getArtid(),
             'bas_quantity' => $basket->getQuantity()
             );
-        if ($basket) {
+        if (0==1) {
             // The article has already been saved : update it
-            $this->getDb()->update('t_basket', $basketData, 1);
+            $this->getDb()->update('t_basket', $basketData, array('bas_id' => $basket->getId()));
         } else {
             // The article has never been saved : insert it
             $this->getDb()->insert('t_basket', $basketData);

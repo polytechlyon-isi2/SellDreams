@@ -10,7 +10,8 @@ class ArticleType extends AbstractType
         $builder
             ->add('title', 'text')
             ->add('content', 'textarea')
-            ->add('categorie', 'text')
+            ->add('categorie', 'choice', array('choices' => array('1' => 'Reve' ,'2' => 'Cauchemar' )
+            ))
             ->add('img', 'text')
             ->add('value', 'text');
     }

@@ -212,11 +212,11 @@ $app->get('/admin/user/{id}/delete', function($id, Request $request) use ($app) 
 })->bind('admin_user_delete');
 
 // Add new article in basket
-$app->match('/basket', function($id, Request $request) use ($app) {
+$app->match('/basket', function($id) use ($app) {
     //$id est l'indice de l'article
     //$user est l'utilisateur a qui on veut ajouter l'article
     $user = $app['user'];
     $basket = $app['dao.basket']->findByUserAndArticle($user->getId(),$id);
-    $app['dao.article']->save($article);
+    $app['dao.basket']->save($basket);
     return $app->redirect($app['url_generator']->generate('basket'));
 })->bind('add_basket');
