@@ -19,9 +19,12 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array('categories' => $categories));
 })->bind('home');
 
+
 // Basket page
 $app->get('/basket', function () use ($app) {
-    return $app['twig']->render('basket.html.twig');
+    $user = $app['user'];
+    $baskets = $app['dao.basket']->findAllByUser($user->getId());
+    return $app['twig']->render('basket.html.twig', array('baskets' => $baskets));
 })->bind('basket');
 
 

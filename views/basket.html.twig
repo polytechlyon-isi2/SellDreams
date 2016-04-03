@@ -3,5 +3,12 @@
 
 {% block content %}
     <br/>
-    
- {% endblock %}
+    <div class="container">
+        <br>
+        <div class="row">
+            {% for basket in baskets %}
+                <p>{{ basket.title }}  {{ basket.quantity }} {{ basket.value }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

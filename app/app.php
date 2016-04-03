@@ -43,6 +43,9 @@ $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider());
 
 // Register services
+$app['dao.basket'] = $app->share(function ($app) {
+    return new SellDreams\DAO\BasketDAO($app['db']);
+});
 $app['dao.article'] = $app->share(function ($app) {
     return new SellDreams\DAO\ArticleDAO($app['db']);
 });

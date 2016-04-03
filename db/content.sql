@@ -12,7 +12,7 @@ insert into t_article values
 insert into t_article values
 (4, 'Enfer', 'Venez d''écrouvrir votre futur résidence au plus vite nous somme tou impatient de vous retrouver 7 pied sous terre',2,'/images/septieme.jpg',19);
 
-/*
+
 insert into t_user values
 (1, 'admin', 'nom de famille','adresse','38530','Pontcharra','matthieu@gmail.com', 'gqeuP4YJ8hU3ZqGwGikB6+rcZBqefVy+7hTLQkOD+jwVkp4fkS7/gr1rAQfn9VUKWc7bvOD7OsXrQQN5KGHbfg==', 'EDDsl&fBCJB|a5XUtAlnQN8', 'ROLE_ADMIN');
 
@@ -23,4 +23,7 @@ insert into t_comment values
 
 insert into t_basket values
 (1,1,1,18);
-*/
+insert into t_basket values
+(2,1,2,4);
+insert into t_basket values
+(3,1,3,7);
