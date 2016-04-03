@@ -5,7 +5,7 @@ use SellDreams\Domain\Article;
 class ArticleDAO extends DAO
 {
 	/**
-     * @var \MicroCMS\DAO\ArticleDAO
+     * @var \SellDreams\DAO\ArticleDAO
      */
     private $categorieDAO;
     public function setCategorieDAO(CategorieDAO $categorieDAO) {
