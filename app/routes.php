@@ -3,9 +3,11 @@ use Symfony\Component\HttpFoundation\Request;
 use SellDreams\Domain\Comment;
 use SellDreams\Domain\Article;
 use SellDreams\Domain\User;
+use SellDreams\Domain\Basket;
 use SellDreams\Form\Type\CommentType;
 use SellDreams\Form\Type\ArticleType;
 use SellDreams\Form\Type\UserType;
+use SellDreams\Form\Type\BasketType;
 
 // Home page
 $app->get('/categorie/{id}', function ($id) use ($app) {
@@ -33,25 +35,38 @@ $app->get('/basket', function () use ($app) {
 $app->match('/article/{id}', function ($id, Request $request) use ($app) {
     $article = $app['dao.article']->find($id);
     $commentFormView = null;
+    $basketFormView = null;
     if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
-        // A user is fully authenticated : he can add comments
+        // A user is fully authenticated : he can add comments and article
+        $user = $app['user'];
         $comment = new Comment();
         $comment->setArticle($article);
-        $user = $app['user'];
         $comment->setAuthor($user);
         $commentForm = $app['form.factory']->create(new CommentType(), $comment);
         $commentForm->handleRequest($request);
+        
+        $basket = new Basket();
+        $basket->setUsrid($user->getId());
+        $basket->setArtid($article->getId());
+        $basketForm = $app['form.factory']->create(new BasketType(), $basket);
+        $basketForm->handleRequest($request);
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $app['dao.comment']->save($comment);
-            $app['session']->getFlashBag()->add('success', 'Your comment was succesfully added.');
+            $app['session']->getFlashBag()->add('success', 'Votre commentaire à bien était ajouté');
+        }
+        if ($basketForm->isSubmitted() && $basketForm->isValid()) {
+            $app['dao.basket']->save($basket);
+            $app['session']->getFlashBag()->add('success', "L'article à bient était ajouté au panier");
         }
         $commentFormView = $commentForm->createView();
+        $basketFormView = $basketForm->createView();
     }
     $comments = $app['dao.comment']->findAllByArticle($id);
     return $app['twig']->render('article.html.twig', array(
         'article' => $article, 
         'comments' => $comments,
-        'commentForm' => $commentFormView));
+        'commentForm' => $commentFormView,
+        'basketForm' => $basketFormView));
 })->bind('article');
 
 // Login form
@@ -201,7 +216,7 @@ $app->match('/user/edit', function(Request $request) use ($app) {
 })->bind('user_edit');
 
 // Remove a user
-$app->get('/admin/user/{id}/delete', function($id, Request $request) use ($app) {
+$app->get('/admin/user/{id}/delete', function($id) use ($app) {
     // Delete all associated comments
     $app['dao.comment']->deleteAllByUser($id);
     // Delete the user
@@ -212,11 +227,27 @@ $app->get('/admin/user/{id}/delete', function($id, Request $request) use ($app) 
 })->bind('admin_user_delete');
 
 // Add new article in basket
-$app->match('/basket', function($id) use ($app) {
-    //$id est l'indice de l'article
-    //$user est l'utilisateur a qui on veut ajouter l'article
-    $user = $app['user'];
-    $basket = $app['dao.basket']->findByUserAndArticle($user->getId(),$id);
-    $app['dao.basket']->save($basket);
-    return $app->redirect($app['url_generator']->generate('basket'));
+$app->match('/basket/{id}/add', function($id, Request $request) use ($app) {
+    $basketType = $app['form.factory']->create(new BasketType());
+    $basketType->handleRequest($request);
+    if ($basketType->isSubmitted() && $basketType->isValid()) {
+        // generate a random salt value
+        $id ++;
+    }
+    return $app['twig']->render('basket_form.html.twig', array(
+        'basketType' => $basketType->createView()));
 })->bind('add_basket');
+
+
+$app->match('/admin/comment/{id}/edit', function($id, Request $request) use ($app) {
+    $comment = $app['dao.comment']->find($id);
+    $commentForm = $app['form.factory']->create(new CommentType(), $comment);
+    $commentForm->handleRequest($request);
+    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+        $app['dao.comment']->save($comment);
+        $app['session']->getFlashBag()->add('success', 'The comment was succesfully updated.');
+    }
+    return $app['twig']->render('comment_form.html.twig', array(
+        'title' => 'Edit comment',
+        'commentForm' => $commentForm->createView()));
+})->bind('admin_comment_edit');
