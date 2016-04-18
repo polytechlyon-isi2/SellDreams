@@ -8,7 +8,7 @@ class BasketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('quantity', 'text');
+                ->add('quantity', 'number',array('max_length'=>5));
     }
 
     public function getName()

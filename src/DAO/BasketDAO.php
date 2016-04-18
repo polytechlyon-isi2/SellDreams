@@ -85,20 +85,22 @@ class BasketDAO extends DAO
         $id = $this->getDb()->lastInsertId();
         $basket->setId($id);
     }
+    
     /**
      * Saves a comment into the database.
      *
      * @param \sellDreams\Domain\Basket $basket The comment to save
      */
     public function update(Basket $basket) {
+        $this->getDb()->delete('t_basket', array('bas_id' => $basket->getId()));
         $basketData = array(
             'usr_id' => $basket->getUsrid(),
             'art_id' => $basket->getArtid(),
             'bas_quantity' => $basket->getQuantity()
             );
-        
-        // The article has already been saved : update it
-        $this->getDb()->update('t_basket', $basketData, array($basket->getId()));
+        $this->getDb()->insert('t_basket', $basketData);
+        $id = $this->getDb()->lastInsertId();
+        $basket->setId($id);
     }
     
     /**
@@ -110,6 +112,4 @@ class BasketDAO extends DAO
         // Delete the article
         $this->getDb()->delete('t_basket', array('bas_id' => $id));
     }
-    
-    
 }

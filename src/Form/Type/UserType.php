@@ -13,7 +13,7 @@ class UserType extends AbstractType
                 ->add('adress', 'text')
                 ->add('postalcode', 'text')
                 ->add('city', 'text')
-                ->add('email', 'text') 
+                ->add('email', 'email') 
 
                 ->add('password', 'repeated', array(
                     'type'            => 'password',

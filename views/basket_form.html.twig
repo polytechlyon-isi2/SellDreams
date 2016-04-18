@@ -12,14 +12,11 @@
 <div class="body">
 {{ form_start(basketType, { 'attr': {'class': 'form-horizontal'} }) }}
     <div class="form-group">
-        {{ form_label(basketType.quantity, null, { 'label_attr':  {
-            'class': 'col-sm-1 control-label'
-        }}) }}
-        <div class="col-sm-1">
+        <div class="col-sm-5">
             {{ form_errors(basketType.quantity) }}
             {{ form_widget(basketType.quantity, { 'attr':  {
                 'class': 'form-control',
-                'rows': '1'                
+                'rows': '2'
             }}) }}
         </div>
     </div>
