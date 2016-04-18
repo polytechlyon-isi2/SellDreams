@@ -29,46 +29,6 @@ $app->get('/basket', function () use ($app) {
     return $app['twig']->render('basket.html.twig', array('baskets' => $baskets));
 })->bind('basket');
 
-
-
-// Article details with comments
-$app->match('/article/{id}', function ($id, Request $request) use ($app) {
-    $article = $app['dao.article']->find($id);
-    $commentFormView = null;
-    $basketFormView = null;
-    if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
-        // A user is fully authenticated : he can add comments and article
-        $user = $app['user'];
-        $comment = new Comment();
-        $comment->setArticle($article);
-        $comment->setAuthor($user);
-        $commentForm = $app['form.factory']->create(new CommentType(), $comment);
-        $commentForm->handleRequest($request);
-        
-        $basket = new Basket();
-        $basket->setUsrid($user->getId());
-        $basket->setArtid($article->getId());
-        $basketForm = $app['form.factory']->create(new BasketType(), $basket);
-        $basketForm->handleRequest($request);
-        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            $app['dao.comment']->save($comment);
-            $app['session']->getFlashBag()->add('success', 'Votre commentaire à bien était ajouté');
-        }
-        if ($basketForm->isSubmitted() && $basketForm->isValid()) {
-            $app['dao.basket']->save($basket);
-            $app['session']->getFlashBag()->add('success', "L'article à bient était ajouté au panier");
-        }
-        $commentFormView = $commentForm->createView();
-        $basketFormView = $basketForm->createView();
-    }
-    $comments = $app['dao.comment']->findAllByArticle($id);
-    return $app['twig']->render('article.html.twig', array(
-        'article' => $article, 
-        'comments' => $comments,
-        'commentForm' => $commentFormView,
-        'basketForm' => $basketFormView));
-})->bind('article');
-
 // Login form
 $app->get('/login', function(Request $request) use ($app) {
     return $app['twig']->render('login.html.twig', array(
@@ -89,6 +49,161 @@ $app->get('/admin', function() use ($app) {
 })->bind('admin');
 
 
+//-----------------------------------------------------------------//
+// Article details with comments
+$app->match('/article/{id}', function ($id, Request $request) use ($app) {
+    $article = $app['dao.article']->find($id);
+    $commentFormView = null;
+    $basketFormView = null;
+    if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+        // A user is fully authenticated : he can add comments and article
+        $user = $app['user'];
+        $comment = new Comment();
+        $comment->setArticle($article);
+        $comment->setAuthor($user);
+        $commentForm = $app['form.factory']->create(new CommentType(), $comment);
+        $commentForm->handleRequest($request);
+        $tmp = 2;
+        $basket = $app['dao.basket']->findByUsrArt($user->getId(), $article->getId());
+        if($basket == null){
+            $tmp = 1;
+            $basket = new Basket();
+            $basket->setUsrid($user->getId());
+            $basket->setArtid($article->getId());
+        }
+        $basketForm = $app['form.factory']->create(new BasketType(), $basket);
+        $basketForm->handleRequest($request);
+        
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $app['dao.comment']->save($comment);
+            $app['session']->getFlashBag()->add('success', 'Votre commentaire à bien était ajouté');
+        }
+        if ($basketForm->isSubmitted() && $basketForm->isValid()) {
+            if($tmp!=1){
+                $app['dao.basket']->update($basket);
+                $app['session']->getFlashBag()->add('success', "L'article à bien était modfier dans le panier");
+            }else{
+                $app['dao.basket']->save($basket);
+                $app['session']->getFlashBag()->add('success', "L'article à bient était ajouté au panier");
+            }
+            
+        }
+        $commentFormView = $commentForm->createView();
+        $basketFormView = $basketForm->createView();
+    }
+    $comments = $app['dao.comment']->findAllByArticle($id);
+    return $app['twig']->render('article.html.twig', array(
+        'article' => $article, 
+        'comments' => $comments,
+        'commentForm' => $commentFormView,
+        'basketForm' => $basketFormView));
+})->bind('article');
+
+/*-----------------------------------------------------------------------------------
+----------------------------------------- USER --------------------------------------
+-----------------------------------------------------------------------------------*/
+// Edit an existing user
+$app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) {
+    $user = $app['dao.user']->find($id);
+    $userForm = $app['form.factory']->create(new UserType(), $user);
+    $userForm->handleRequest($request);
+    if ($userForm->isSubmitted() && $userForm->isValid()) {
+        $plainPassword = $user->getPassword();
+        // find the encoder for the user
+        $encoder = $app['security.encoder_factory']->getEncoder($user);
+        // compute the encoded password
+        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        $user->setPassword($password); 
+        $app['dao.user']->save($user);
+        $app['session']->getFlashBag()->add('success', 'The user was succesfully updated.');
+    }
+    return $app['twig']->render('user_form.html.twig', array(
+        'title' => 'Edit user',
+        'userForm' => $userForm->createView()));
+})->bind('admin_user_edit');
+
+// Add a user
+$app->match('/user/add', function(Request $request) use ($app) {
+    $user = new User();
+    $userForm = $app['form.factory']->create(new UserType(), $user);
+    $userForm->handleRequest($request);
+    if ($userForm->isSubmitted() && $userForm->isValid()) {
+        // generate a random salt value
+        $salt = substr(md5(time()), 0, 23);
+        $user->setSalt($salt);
+        $plainPassword = $user->getPassword();
+        // find the default encoder
+        $encoder = $app['security.encoder.digest'];
+        // compute the encoded password
+        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        $user->setPassword($password); 
+        $app['dao.user']->save($user);
+        $app['session']->getFlashBag()->add('success', 'The user was successfully created.');
+    }
+    return $app['twig']->render('user_form.html.twig', array(
+        'title' => 'New user',
+        'userForm' => $userForm->createView()));
+})->bind('user_add');
+
+$app->match('/user/edit', function(Request $request) use ($app) {
+    $user = $app['user'];
+    $userForm = $app['form.factory']->create(new UserType(), $user);
+    $userForm->handleRequest($request);
+    if ($userForm->isSubmitted() && $userForm->isValid()) {
+        $plainPassword = $user->getPassword();
+        // find the encoder for the user
+        $encoder = $app['security.encoder_factory']->getEncoder($user);
+        // compute the encoded password
+        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        $user->setPassword($password); 
+        $app['dao.user']->save($user);
+        $app['session']->getFlashBag()->add('success', 'The user was succesfully updated.');
+    }
+    return $app['twig']->render('user_form.html.twig', array(
+        'title' => 'Edit user',
+        'userForm' => $userForm->createView()));
+})->bind('user_edit');
+
+// Remove a user
+$app->get('/admin/user/{id}/delete', function($id) use ($app) {
+    // Delete all associated comments
+    $app['dao.comment']->deleteAllByUser($id);
+    // Delete the user
+    $app['dao.user']->delete($id);
+    $app['session']->getFlashBag()->add('success', 'The user was succesfully removed.');
+    // Redirect to admin home page
+    return $app->redirect($app['url_generator']->generate('admin'));
+})->bind('admin_user_delete');
+
+/*-----------------------------------------------------------------------------------
+--------------------------------------- COMMENT -------------------------------------
+-----------------------------------------------------------------------------------*/
+// Edit an existing comment
+$app->match('/admin/comment/{id}/edit', function($id, Request $request) use ($app) {
+    $comment = $app['dao.comment']->find($id);
+    $commentForm = $app['form.factory']->create(new CommentType(), $comment);
+    $commentForm->handleRequest($request);
+    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+        $app['dao.comment']->save($comment);
+        $app['session']->getFlashBag()->add('success', 'The comment was succesfully updated.');
+    }
+    return $app['twig']->render('comment_form.html.twig', array(
+        'title' => 'Edit comment',
+        'commentForm' => $commentForm->createView()));
+})->bind('admin_comment_edit');
+
+// Remove a comment
+$app->get('/admin/comment/{id}/delete', function($id, Request $request) use ($app) {
+    $app['dao.comment']->delete($id);
+    $app['session']->getFlashBag()->add('success', 'The comment was succesfully removed.');
+    // Redirect to admin home page
+    return $app->redirect($app['url_generator']->generate('admin'));
+})->bind('admin_comment_delete');
+
+
+/*-----------------------------------------------------------------------------------
+--------------------------------------- ARTICLE -------------------------------------
+-----------------------------------------------------------------------------------*/
 // Add a new article
 $app->match('/admin/article/add', function(Request $request) use ($app) {
     $article = new Article();
@@ -128,126 +243,14 @@ $app->get('/admin/article/{id}/delete', function($id, Request $request) use ($ap
     return $app->redirect($app['url_generator']->generate('admin'));
 })->bind('admin_article_delete');
 
-
-// Edit an existing comment
-$app->match('/admin/comment/{id}/edit', function($id, Request $request) use ($app) {
-    $comment = $app['dao.comment']->find($id);
-    $commentForm = $app['form.factory']->create(new CommentType(), $comment);
-    $commentForm->handleRequest($request);
-    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-        $app['dao.comment']->save($comment);
-        $app['session']->getFlashBag()->add('success', 'The comment was succesfully updated.');
-    }
-    return $app['twig']->render('comment_form.html.twig', array(
-        'title' => 'Edit comment',
-        'commentForm' => $commentForm->createView()));
-})->bind('admin_comment_edit');
-
-// Remove a comment
-$app->get('/admin/comment/{id}/delete', function($id, Request $request) use ($app) {
-    $app['dao.comment']->delete($id);
-    $app['session']->getFlashBag()->add('success', 'The comment was succesfully removed.');
+/*-----------------------------------------------------------------------------------
+--------------------------------------- BASKET -------------------------------------
+-----------------------------------------------------------------------------------*/
+// Remove an basket
+$app->get('/basket/{id}/delete', function($id, Request $request) use ($app) {
+    // Delete the article
+    $app['dao.basket']->delete($id);
+    $app['session']->getFlashBag()->add('success', "L'article a correctement etait supprimer de votre panier");
     // Redirect to admin home page
-    return $app->redirect($app['url_generator']->generate('admin'));
-})->bind('admin_comment_delete');
-
-
-// Add a user
-$app->match('/user/add', function(Request $request) use ($app) {
-    $user = new User();
-    $userForm = $app['form.factory']->create(new UserType(), $user);
-    $userForm->handleRequest($request);
-    if ($userForm->isSubmitted() && $userForm->isValid()) {
-        // generate a random salt value
-        $salt = substr(md5(time()), 0, 23);
-        $user->setSalt($salt);
-        $plainPassword = $user->getPassword();
-        // find the default encoder
-        $encoder = $app['security.encoder.digest'];
-        // compute the encoded password
-        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-        $user->setPassword($password); 
-        $app['dao.user']->save($user);
-        $app['session']->getFlashBag()->add('success', 'The user was successfully created.');
-    }
-    return $app['twig']->render('user_form.html.twig', array(
-        'title' => 'New user',
-        'userForm' => $userForm->createView()));
-})->bind('user_add');
-
-
-// Edit an existing user
-$app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) {
-    $user = $app['dao.user']->find($id);
-    $userForm = $app['form.factory']->create(new UserType(), $user);
-    $userForm->handleRequest($request);
-    if ($userForm->isSubmitted() && $userForm->isValid()) {
-        $plainPassword = $user->getPassword();
-        // find the encoder for the user
-        $encoder = $app['security.encoder_factory']->getEncoder($user);
-        // compute the encoded password
-        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-        $user->setPassword($password); 
-        $app['dao.user']->save($user);
-        $app['session']->getFlashBag()->add('success', 'The user was succesfully updated.');
-    }
-    return $app['twig']->render('user_form.html.twig', array(
-        'title' => 'Edit user',
-        'userForm' => $userForm->createView()));
-})->bind('admin_user_edit');
-
-$app->match('/user/edit', function(Request $request) use ($app) {
-    $user = $app['user'];
-    $userForm = $app['form.factory']->create(new UserType(), $user);
-    $userForm->handleRequest($request);
-    if ($userForm->isSubmitted() && $userForm->isValid()) {
-        $plainPassword = $user->getPassword();
-        // find the encoder for the user
-        $encoder = $app['security.encoder_factory']->getEncoder($user);
-        // compute the encoded password
-        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-        $user->setPassword($password); 
-        $app['dao.user']->save($user);
-        $app['session']->getFlashBag()->add('success', 'The user was succesfully updated.');
-    }
-    return $app['twig']->render('user_form.html.twig', array(
-        'title' => 'Edit user',
-        'userForm' => $userForm->createView()));
-})->bind('user_edit');
-
-// Remove a user
-$app->get('/admin/user/{id}/delete', function($id) use ($app) {
-    // Delete all associated comments
-    $app['dao.comment']->deleteAllByUser($id);
-    // Delete the user
-    $app['dao.user']->delete($id);
-    $app['session']->getFlashBag()->add('success', 'The user was succesfully removed.');
-    // Redirect to admin home page
-    return $app->redirect($app['url_generator']->generate('admin'));
-})->bind('admin_user_delete');
-
-// Add new article in basket
-$app->match('/basket/{id}/add', function($id, Request $request) use ($app) {
-    $basketType = $app['form.factory']->create(new BasketType());
-    $basketType->handleRequest($request);
-    if ($basketType->isSubmitted() && $basketType->isValid()) {
-        // generate a random salt value
-        $id ++;
-    }
-    return $app['twig']->render('basket_form.html.twig', array(
-        'basketType' => $basketType->createView()));
-})->bind('add_basket');
-
-
-$app->match('/admin/comment/{id}/edit', function($id, Request $request) use ($app) {
-    $comment = $app['dao.comment']->find($id);
-    $commentForm = $app['form.factory']->create(new CommentType(), $comment);
-    $commentForm->handleRequest($request);
-    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-        $app['dao.comment']->save($comment);
-        $app['session']->getFlashBag()->add('success', 'The comment was succesfully updated.');
-    }
-    return $app['twig']->render('comment_form.html.twig', array(
-        'title' => 'Edit comment',
-        'commentForm' => $commentForm->createView()));
-})->bind('admin_comment_edit');
+    return $app->redirect($app['url_generator']->generate('basket'));
+})->bind('basket_delete');

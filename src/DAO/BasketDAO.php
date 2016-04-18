@@ -29,6 +29,27 @@ class BasketDAO extends DAO
     }
     
     /**
+     * Returns an categorie matching the supplied id.
+     *
+     * @param integer $id
+     *
+     * @return \SellDreams\Domain\Article|throws an exception if no matching article is found
+     */
+    public function findByUsrArt($usrid, $artid) {
+
+        $sql = "SELECT bas_id, usr_id, B.art_id, bas_quantity, A.art_title, A.art_value FROM t_basket B, t_article A WHERE A.art_id = B.art_id AND usr_id=? AND B.art_id=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($usrid, $artid));
+        if ($row){
+            $basket=$this->buildDomainObject($row);
+        }
+        else{
+            $basket=null;
+        }
+        return $basket;
+    }
+    
+    
+    /**
      * Creates an Basket object based on a DB row.
      *
      * @param array $row The DB row containing Article data.
@@ -44,10 +65,8 @@ class BasketDAO extends DAO
         $basket->setValue($row['art_value']);
         return $basket;
     }
+
     
-    public function articleIsInBasket($basket){
-        return true;
-    }
     
     /**
      * Saves a comment into the database.
@@ -60,16 +79,37 @@ class BasketDAO extends DAO
             'art_id' => $basket->getArtid(),
             'bas_quantity' => $basket->getQuantity()
             );
-        if ($basket->getId() && existe()) {
-            // The article has already been saved : update it
-            $this->getDb()->update('t_basket', $basketData, array('bas_id' => $basket->getId()));
-        } else {
-            // The article has never been saved : insert it
-            $this->getDb()->insert('t_basket', $basketData);
-            // Get the id of the newly created comment and set it on the entity.
-            $id = $this->getDb()->lastInsertId();
-            $basket->setId($id);
-        }
+        // The article has never been saved : insert it
+        $this->getDb()->insert('t_basket', $basketData);
+        // Get the id of the newly created comment and set it on the entity.
+        $id = $this->getDb()->lastInsertId();
+        $basket->setId($id);
     }
+    /**
+     * Saves a comment into the database.
+     *
+     * @param \sellDreams\Domain\Basket $basket The comment to save
+     */
+    public function update(Basket $basket) {
+        $basketData = array(
+            'usr_id' => $basket->getUsrid(),
+            'art_id' => $basket->getArtid(),
+            'bas_quantity' => $basket->getQuantity()
+            );
+        
+        // The article has already been saved : update it
+        $this->getDb()->update('t_basket', $basketData, array($basket->getId()));
+    }
+    
+    /**
+     * Removes an article from the database.
+     *
+     * @param integer $id The article id.
+     */
+    public function delete($id) {
+        // Delete the article
+        $this->getDb()->delete('t_basket', array('bas_id' => $id));
+    }
+    
     
 }
