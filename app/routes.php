@@ -7,6 +7,7 @@ use SellDreams\Domain\Basket;
 use SellDreams\Form\Type\CommentType;
 use SellDreams\Form\Type\ArticleType;
 use SellDreams\Form\Type\UserType;
+use SellDreams\Form\Type\UserAdmin;
 use SellDreams\Form\Type\BasketType;
 
 // Home page
@@ -105,7 +106,7 @@ $app->match('/article/{id}', function ($id, Request $request) use ($app) {
 // Edit an existing user
 $app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) {
     $user = $app['dao.user']->find($id);
-    $userForm = $app['form.factory']->create(new UserType(), $user);
+    $userForm = $app['form.factory']->create(new UserAdmin(), $user);
     $userForm->handleRequest($request);
     if ($userForm->isSubmitted() && $userForm->isValid()) {
         $plainPassword = $user->getPassword();
@@ -122,6 +123,24 @@ $app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) 
         'userForm' => $userForm->createView()));
 })->bind('admin_user_edit');
 
+$app->match('/user/edit', function(Request $request) use ($app) {
+    $user = $app['user'];
+    $userForm = $app['form.factory']->create(new UserType(), $user);
+    $userForm->handleRequest($request);
+    if ($userForm->isSubmitted() && $userForm->isValid()) {
+        $plainPassword = $user->getPassword();
+        // find the encoder for the user
+        $encoder = $app['security.encoder_factory']->getEncoder($user);
+        // compute the encoded password
+        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        $user->setPassword($password); 
+        $app['dao.user']->save($user);
+        $app['session']->getFlashBag()->add('success', 'The user was succesfully updated.');
+    }
+    return $app['twig']->render('user_form.html.twig', array(
+        'title' => 'Edit user',
+        'userForm' => $userForm->createView()));
+})->bind('user_edit');
 // Add a user
 $app->match('/user/add', function(Request $request) use ($app) {
     $user = new User();
@@ -144,25 +163,6 @@ $app->match('/user/add', function(Request $request) use ($app) {
         'title' => 'New user',
         'userForm' => $userForm->createView()));
 })->bind('user_add');
-
-$app->match('/user/edit', function(Request $request) use ($app) {
-    $user = $app['user'];
-    $userForm = $app['form.factory']->create(new UserType(), $user);
-    $userForm->handleRequest($request);
-    if ($userForm->isSubmitted() && $userForm->isValid()) {
-        $plainPassword = $user->getPassword();
-        // find the encoder for the user
-        $encoder = $app['security.encoder_factory']->getEncoder($user);
-        // compute the encoded password
-        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-        $user->setPassword($password); 
-        $app['dao.user']->save($user);
-        $app['session']->getFlashBag()->add('success', 'The user was succesfully updated.');
-    }
-    return $app['twig']->render('user_form.html.twig', array(
-        'title' => 'Edit user',
-        'userForm' => $userForm->createView()));
-})->bind('user_edit');
 
 // Remove a user
 $app->get('/admin/user/{id}/delete', function($id) use ($app) {

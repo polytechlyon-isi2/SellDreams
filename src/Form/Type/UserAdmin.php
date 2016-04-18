@@ -3,7 +3,7 @@ namespace SellDreams\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-class UserType extends AbstractType
+class UserAdmin extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $otpions)
     {
@@ -22,7 +22,7 @@ class UserType extends AbstractType
                 'first_options'   => array('label' => 'Mot de passe'),
                 'second_options'  => array('label' => 'Mot de passe (confirmation)'),
             ))
-            ->add('role', 'choice', array('choices' => array('ROLE_USER' => 'User' )
+            ->add('role', 'choice', array('choices' => array('ROLE_USER' => 'User' ,'ROLE_ADMIN' => 'Admin' )
             ));
     }
 
