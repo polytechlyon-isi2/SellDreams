@@ -8,10 +8,13 @@
     <link href="{{ app.request.basepath }}/css/selldreams.css" rel="stylesheet">
     <title>SellDreams - {% block title %}{% endblock %}</title>
 </head>
-{% if (categorie is defined and categorie.title=="Reve") or (article is defined and article.categorie==1) %}
-<body class="whiteBackGround">
+
+{% if ((categorie is defined and categorie.title=="Reve") or (article is defined and article.categorie==1))%}
+    <body class="whiteBackGround">
+{% elseif(categorie is defined and categorie.title=="Cauchemar") or (article is defined and article.categorie==2)%}
+    <body class="darkBackGround">    
 {% else %}
-<body class="darkBackGround">    
+    <body class="homebackground">  
 {% endif %}
     <div class="container">
         <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">

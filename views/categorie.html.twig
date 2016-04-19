@@ -2,7 +2,12 @@
 {% block title %}{{ categorie.title }}{% endblock %}
 
 {% block content %}
-
+    <h2>
+        Définition :
+    </h2>
+    <p>
+        {{ categorie.content }}
+    </p>
     <div class="container">
         <br>
         <div class="row">
@@ -13,7 +18,7 @@
                 {% else %}
                     <a class="thumbnail" href="{{ path('article', { 'id': article.id }) }}"style="background-color: black;color: white;">
                 {% endif %}
-                    <img src="{{ app.request.basepath }}/images/{{ article.img }}" alt=""><h2>{{ article.title }}</h2>
+                    <img src="{{ app.request.basepath }}/images/{{ article.img }}"><h2>{{ article.title }}</h2>
                     <p>{{ article.value }}$</p>
                 </a>
             </div>
