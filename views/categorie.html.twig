@@ -14,12 +14,13 @@
             {% for article in articles %}
             <div class="col-md-4">
                 {% if categorie.title=="Reve" %}
-                    <a class="thumbnail" href="{{ path('article', { 'id': article.id }) }}" style="background-color: white;color: black;">
+                    <a class="thumbnail" href="{{ path('article', { 'id': article.id }) }}" style="color: black;">
                 {% else %}
-                    <a class="thumbnail" href="{{ path('article', { 'id': article.id }) }}"style="background-color: black;color: white;">
+                    <a class="thumbnail" href="{{ path('article', { 'id': article.id }) }}"style="color: white;">
                 {% endif %}
-                    <img src="{{ app.request.basepath }}/images/{{ article.img }}"><h2>{{ article.title }}</h2>
-                    <p>{{ article.value }}$</p>
+                <img src="{{ app.request.basepath }}/images/{{ article.img }}">
+                <p class="titre_categorie">{{ article.title }}</p>
+                <p class="valeur_categorie">{{ article.value }} €</p>
                 </a>
             </div>
             {% endfor %}

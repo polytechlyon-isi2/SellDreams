@@ -10,6 +10,7 @@ use SellDreams\Form\Type\UserType;
 use SellDreams\Form\Type\UserAdmin;
 use SellDreams\Form\Type\BasketType;
 
+
 // Home page
 $app->get('/categorie/{id}', function ($id) use ($app) {
     $categorie = $app['dao.categorie']->find($id);

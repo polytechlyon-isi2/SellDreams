@@ -13,29 +13,25 @@
 .homebackground{
     padding-top: 50px; 
     background-image: url('../images/eau_et_feu.jpg');
-    /*background-repeat: no-repeat;*/
+    background-repeat: no-repeat;
+    background-color: black;
     background-size: 100%;
     color: white;
 }
 
 /*affichage des image dans categorie*/
 .thumbnail {
-    text-align: center;
     min-height: 300px;
-    
-    text-decoration: underline;
+    background-color: transparent;
 }
 .thumbnail img {
     front-size: 100%;
-    opacity: 1;
 }
 
 /*affichage des image dans index*/
 .thumbnail_font {
-    text-align: center;
     min-height: 300px;
     color: white;
-    text-decoration: underline;
 }
 .thumbnail_font img {
     width: 550px;
@@ -67,8 +63,21 @@
     border-top: 1px solid #ccc;
     padding-top: 10px;
     text-align: center;
+    bottom: 0;
+    left: 0; right: 0;
 }
 
 h2{
     text-align: center;
+}
+
+.titre_categorie{
+    text-align: left;
+    font-size: large;
+    font-weight: bold;
+}
+.valeur_categorie{
+    text-align: right;
+    color: red;
+    font-size: x-large;
 }

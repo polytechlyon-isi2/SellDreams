@@ -61,9 +61,9 @@
             </table>
         </div>
         {% else %}
-        <div class="alert alert-warning">No articles found.</div>
+        <div class="alert alert-warning">Aucun article trouvé</div>
         {% endif %}
-        <a href="{{ path('admin_article_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add article</button></a>
+        <a href="{{ path('admin_article_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un article</button></a>
     </div>
     <div class="tab-pane fade adminTable" id="comments">
         {% if comments %}
