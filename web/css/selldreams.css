@@ -81,3 +81,11 @@ h2{
     color: red;
     font-size: x-large;
 }
+
+/*message box */
+.modal-header {
+    color: black;
+}
+.modal-body {
+    color: black;
+}

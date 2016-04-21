@@ -112,4 +112,17 @@ class BasketDAO extends DAO
         // Delete the article
         $this->getDb()->delete('t_basket', array('bas_id' => $id));
     }
+    
+    /**
+     * 
+     * return total price
+     * @param $baskets array of basket
+     */
+    public function sommeQuantity($baskets){
+        $total = 0;
+        foreach($baskets as $basket){
+            $total = $total + $basket->getQuantity()*$basket->getValue();
+        }
+        return $total;
+    }
 }

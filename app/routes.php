@@ -28,7 +28,10 @@ $app->get('/', function () use ($app) {
 $app->get('/basket', function () use ($app) {
     $user = $app['user'];
     $baskets = $app['dao.basket']->findAllByUser($user->getId());
-    return $app['twig']->render('basket.html.twig', array('baskets' => $baskets));
+    $somme = $app['dao.basket']->sommeQuantity($baskets);
+    return $app['twig']->render('basket.html.twig', array(
+        'baskets' => $baskets,
+        'somme' => $somme));
 })->bind('basket');
 
 // Login form
