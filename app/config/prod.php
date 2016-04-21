@@ -1,7 +1,7 @@
 <?php
 
 // Doctrine (db)
-/*
+
 $app['db.options'] = array(
     'driver'   => 'pdo_mysql',
     'charset'  => 'utf8',
@@ -11,8 +11,8 @@ $app['db.options'] = array(
     'user'     => 'selldreams_user',
     'password' => 'MonSecret',
 );
-*/
 
+/*
 // MySQL config for OpenShift
 $app['db.options'] = array(
     'charset'  => 'utf8',
@@ -21,3 +21,5 @@ $app['db.options'] = array(
     'user'     => getenv('OPENSHIFT_MYSQL_DB_USERNAME'),
     'password' => getenv('OPENSHIFT_MYSQL_DB_PASSWORD'),
 );
+ * 
+ */
