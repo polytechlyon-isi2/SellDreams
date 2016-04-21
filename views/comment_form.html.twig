@@ -12,10 +12,10 @@
 <div class="body">
 {{ form_start(commentForm, { 'attr': {'class': 'form-horizontal'} }) }}
     <div class="form-group">
-        {{ form_label(commentForm.content, null, { 'label_attr':  {
-            'class': 'col-sm-4 control-label'
-        }}) }}
-        <div class="col-sm-6">
+        <div class="col-sm-4 control-label">
+            Contenu
+        </div>
+        <div class="col-sm-5">
             {{ form_errors(commentForm.content) }}
             {{ form_widget(commentForm.content, { 'attr':  {
                 'class': 'form-control',

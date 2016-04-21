@@ -9,7 +9,7 @@ class BasketDAO extends DAO
 
     
     /**
-     * Returns an categorie matching the supplied id.
+     * Returns an basket matching user id
      *
      * @param integer $id
      *
@@ -29,7 +29,7 @@ class BasketDAO extends DAO
     }
     
     /**
-     * Returns an categorie matching the supplied id.
+     * Returns an basket matching user id and article id
      *
      * @param integer $id
      *
@@ -53,7 +53,7 @@ class BasketDAO extends DAO
      * Creates an Basket object based on a DB row.
      *
      * @param array $row The DB row containing Article data.
-     * @return \MicroCMS\Domain\Article
+     * @return \SellDreams\Domain\Article
      */
     protected function buildDomainObject($row) {
         $basket = new Basket();
@@ -87,7 +87,7 @@ class BasketDAO extends DAO
     }
     
     /**
-     * Saves a comment into the database.
+     * Update a comment into the database.
      *
      * @param \sellDreams\Domain\Basket $basket The comment to save
      */
@@ -114,9 +114,8 @@ class BasketDAO extends DAO
     }
     
     /**
-     * 
-     * return total price
      * @param $baskets array of basket
+     * return total price
      */
     public function sommeQuantity($baskets){
         $total = 0;

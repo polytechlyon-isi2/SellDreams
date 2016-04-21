@@ -14,7 +14,7 @@ class UserDAO extends DAO implements UserProviderInterface
      *
      * @param integer $id The user id.
      *
-     * @return \MicroCMS\Domain\User|throws an exception if no matching user is found
+     * @return \SellDreams\Domain\User|throws an exception if no matching user is found
      */
     public function find($id) {
         $sql = "select * from t_user where usr_id=?";

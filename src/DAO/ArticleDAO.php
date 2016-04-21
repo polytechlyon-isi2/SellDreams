@@ -4,7 +4,7 @@ namespace SellDreams\DAO;
 use SellDreams\Domain\Article;
 class ArticleDAO extends DAO
 {
-	/**
+    /**
      * @var \SellDreams\DAO\ArticleDAO
      */
     private $categorieDAO;
@@ -13,7 +13,7 @@ class ArticleDAO extends DAO
     }
 
     /**
-     * Return a list of all articles, sorted by date (most recent first).
+     * Return a list of all articles matching the supplied categorie id
      *
      * @return array A list of all articles.
      */
@@ -45,7 +45,8 @@ class ArticleDAO extends DAO
         $article->setValue($row['art_value']);
         return $article;
     }
-	/**
+    
+    /**
      * Returns an article matching the supplied id.
      *
      * @param integer $id
@@ -62,6 +63,11 @@ class ArticleDAO extends DAO
             throw new \Exception("No article matching id " . $id);
     }
     
+    /**
+     * Return a list of all articles
+     *
+     * @return array A list of all articles.
+     */
     public function findAll() {
         $sql = "select * from t_article order by art_id desc";
         $result = $this->getDb()->fetchAll($sql);

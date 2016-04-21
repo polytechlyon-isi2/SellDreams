@@ -22,8 +22,9 @@ class CategorieDAO extends DAO
         }
         return $categories;
     }
+    
     /**
-     * Creates an Article object based on a DB row.
+     * Creates an Categorie object based on a DB row.
      *
      * @param array $row The DB row containing Article data.
      * @return \MicroCMS\Domain\Article
@@ -36,7 +37,8 @@ class CategorieDAO extends DAO
         $categorie->setImg($row['cat_img']);
         return $categorie;
     }
-	/**
+    
+    /**
      * Returns an categorie matching the supplied id.
      *
      * @param integer $id
@@ -47,9 +49,11 @@ class CategorieDAO extends DAO
         $sql = "select * from t_categorie where cat_id=?";
         $row = $this->getDb()->fetchAssoc($sql, array($id));
 
-        if ($row)
+        if ($row){
             return $this->buildDomainObject($row);
-        else
+        }
+        else{
             throw new \Exception("No categorie matching id " . $id);
+        }
     }
 }

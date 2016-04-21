@@ -10,29 +10,18 @@ use SellDreams\Form\Type\UserType;
 use SellDreams\Form\Type\UserAdmin;
 use SellDreams\Form\Type\BasketType;
 
-
-// Home page
+//Categorie page
 $app->get('/categorie/{id}', function ($id) use ($app) {
     $categorie = $app['dao.categorie']->find($id);
     $articles = $app['dao.article']->findAllByCategorie($id);
     return $app['twig']->render('categorie.html.twig', array('articles' => $articles, 'categorie' => $categorie));
 })->bind('categorie');
 
+// Home page
 $app->get('/', function () use ($app) {
     $categories = $app['dao.categorie']->findAll();
     return $app['twig']->render('index.html.twig', array('categories' => $categories));
 })->bind('home');
-
-
-// Basket page
-$app->get('/basket', function () use ($app) {
-    $user = $app['user'];
-    $baskets = $app['dao.basket']->findAllByUser($user->getId());
-    $somme = $app['dao.basket']->sommeQuantity($baskets);
-    return $app['twig']->render('basket.html.twig', array(
-        'baskets' => $baskets,
-        'somme' => $somme));
-})->bind('basket');
 
 // Login form
 $app->get('/login', function(Request $request) use ($app) {
@@ -53,9 +42,7 @@ $app->get('/admin', function() use ($app) {
         'users' => $users));
 })->bind('admin');
 
-
-//-----------------------------------------------------------------//
-// Article details with comments
+// Article details with comments and basket
 $app->match('/article/{id}', function ($id, Request $request) use ($app) {
     $article = $app['dao.article']->find($id);
     $commentFormView = null;
@@ -107,7 +94,7 @@ $app->match('/article/{id}', function ($id, Request $request) use ($app) {
 /*-----------------------------------------------------------------------------------
 ----------------------------------------- USER --------------------------------------
 -----------------------------------------------------------------------------------*/
-// Edit an existing user
+// Edit an existing user when user is admin
 $app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) {
     $user = $app['dao.user']->find($id);
     $userForm = $app['form.factory']->create(new UserAdmin(), $user);
@@ -127,6 +114,7 @@ $app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) 
         'userForm' => $userForm->createView()));
 })->bind('admin_user_edit');
 
+// Edit an existing user when user is not admin
 $app->match('/user/edit', function(Request $request) use ($app) {
     $user = $app['user'];
     $userForm = $app['form.factory']->create(new UserType(), $user);
@@ -145,6 +133,7 @@ $app->match('/user/edit', function(Request $request) use ($app) {
         'title' => 'Edit user',
         'userForm' => $userForm->createView()));
 })->bind('user_edit');
+
 // Add a user
 $app->match('/user/add', function(Request $request) use ($app) {
     $user = new User();
@@ -258,3 +247,13 @@ $app->get('/basket/{id}/delete', function($id, Request $request) use ($app) {
     // Redirect to admin home page
     return $app->redirect($app['url_generator']->generate('basket'));
 })->bind('basket_delete');
+
+// Basket page
+$app->get('/basket', function () use ($app) {
+    $user = $app['user'];
+    $baskets = $app['dao.basket']->findAllByUser($user->getId());
+    $somme = $app['dao.basket']->sommeQuantity($baskets);
+    return $app['twig']->render('basket.html.twig', array(
+        'baskets' => $baskets,
+        'somme' => $somme));
+})->bind('basket');

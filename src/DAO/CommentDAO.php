@@ -47,6 +47,7 @@ class CommentDAO extends DAO
         }
         return $comments;
     }
+    
     /**
      * Creates an Comment object based on a DB row.
      *
@@ -70,7 +71,6 @@ class CommentDAO extends DAO
             $user = $this->userDAO->find($userId);
             $comment->setAuthor($user);
         }
-        
         return $comment;
     }
    
@@ -85,7 +85,6 @@ class CommentDAO extends DAO
             'usr_id' => $comment->getAuthor()->getId(),
             'com_content' => $comment->getContent()
             );
-
         if ($comment->getId()) {
             // The comment has already been saved : update it
             $this->getDb()->update('t_comment', $commentData, array('com_id' => $comment->getId()));
