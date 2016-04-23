@@ -47,12 +47,6 @@
             </div>
         </div>
     </div>
-    <h3>Commentaire</h3>
-    {% for comment in comments %}
-        <strong>{{ comment.author.username }}</strong> à dit : {{ comment.content }}<br>
-    {% else %}
-        Pas de commentaire
-    {% endfor %}
     <h3>Ajouter un commentaire</h3>
     {% if commentForm %}
         {{ form_start(commentForm) }}
@@ -65,7 +59,7 @@
                 }}) }}
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Publier commentaire" />
+                <input type="submit" class="btn btn-primary" value="Publier le commentaire" />
             </div>
         {{ form_end(commentForm) }}
         {% for flashMessage in app.session.flashbag.get('success') %}
@@ -76,6 +70,10 @@
     {% else %}
         <a href="{{ path('login') }} ">Se connecter</a> Pour ajouter un commentaire
     {% endif %}
-    
-    
+        <h2>Commentaires</h2>
+    {% for comment in comments %}
+        <strong>{{ comment.author.username }}</strong> à dit : {{ comment.content }}<br></br>
+    {% else %}
+        Pas de commentaire<br></br>
+    {% endfor %}
 {% endblock %}

@@ -48,7 +48,6 @@ class BasketDAO extends DAO
         return $basket;
     }
     
-    
     /**
      * Creates an Basket object based on a DB row.
      *
@@ -65,8 +64,6 @@ class BasketDAO extends DAO
         $basket->setValue($row['art_value']);
         return $basket;
     }
-
-    
     
     /**
      * Saves a comment into the database.
